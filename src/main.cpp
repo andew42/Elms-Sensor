@@ -17,8 +17,10 @@
 #include "status_page.h"
 
 // ***** Network credentials *****
-const char *ssid = "Elms Home";
-const char *password = "retrotrekdogs98";
+#include "password.h"
+// above secret include file defines:
+// const char *ssid = "ssid";
+// const char *password = "password";
 
 // The influx database UDP address and port
 #define SERVER_IP IPAddress(192, 168, 0, 14)
