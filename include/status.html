@@ -1,0 +1,92 @@
+<style>
+    body {
+        background-color: #202020;
+        font-family: "San Francisco", "Segoe UI", sans-serif;
+    }
+    .board {
+        border-radius: 4px;
+        display: table;
+        padding: 8px;
+        background-color: rgb(64, 51, 153);
+        color: rgb(223, 223, 223);
+        margin-bottom: 4px;
+    }
+
+    .sensor {
+        border-radius: 4px;
+        display: table;
+        padding: 8px;
+        background-color: rgb(163, 93, 36);
+        color: rgb(223, 223, 223);
+        margin-bottom: 4px;
+    }
+
+    .row {
+        display: table-row;
+    }
+
+    .anno {
+        display: table-cell;
+        color: #a8a8a8;
+        font-weight: 500;
+        padding: 2px
+    }
+
+    .data {
+        display: table-cell;
+        padding: 2px
+    }
+
+    input {
+        border-style: solid;
+        border-color: brown;
+        background-color: black;
+        color: rgb(223, 223, 223);;
+        margin-top: 10px;
+        height: 30px;
+        width: 130px;
+        display: block;
+    }
+
+    input:active {
+        background-color: #404040;
+    }
+
+    input:focus {
+        outline-color: darkred;
+    }
+</style>
+<div class="board">
+    <div class="row">
+        <div class="anno">Started</div>
+        <div class="data">Sat 23-11-1963 12:35</div>
+    </div>
+    <div class="row">
+        <div class="anno">Speed</div>
+        <div class="data">80Mhz</div>
+    </div>
+    <div class="row">
+        <div class="anno">IP</div>
+        <div class="data">192.168.0.42</div>
+    </div>
+</div>
+<div class="sensor">
+    <div class="row">
+        <div class="anno">Started</div>
+        <div class="data">Sat 23-11-1963 12:35</div>
+    </div>
+    <div class="row">
+        <div class="anno">Speed</div>
+        <div class="data">80Mhz</div>
+    </div>
+    <div class="row">
+        <div class="anno">IP</div>
+        <div class="data">192.168.0.42</div>
+    </div>
+</div>
+<div>
+    <form method="post" action="/commands">
+        <input type="submit" value="RESTART" name="restart">
+        <input type="submit" value="RECALIBRATE" name="recalibrate">
+    </form>
+</div>

@@ -1,0 +1,8 @@
+Sensor sometimes not identified on power up (end transmission returns 4 or sometimes 2 after OTA)
+Status web page not optimised for iphone
+Show up time on web Status
+Autorefresh on web status
+Calibrate against reference thermometer
+Check into GIT and Thingiverse
+I2E bus double terminated?
+Improve threading
