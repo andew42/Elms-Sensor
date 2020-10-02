@@ -10,14 +10,14 @@ public:
     static int CreateDriverInstances(TwoWire *wire, SensorDriver *firstInstance[], int maxInstances);
     int GetPacketData(char *ptr);
     void Handle();
-    bool IsLastReadingValid() { return _lastLux < 0xffff; }
+    bool IsLastReadingValid() { return _lastLux >= 0; }
     void GetValues(void callback(const char *, const char *));
 
 private:
     TwoWire *_i2c;
     int _address;
     char _id[14];
-    uint16_t _lastLux = 0xffff;
+    float _lastLux = -1;
     long _lastPollMillis = 0;
 
     Bh1750Driver(TwoWire *i2c, int address);

@@ -10,9 +10,17 @@ int Bh1750Driver::CreateDriverInstances(TwoWire *i2c, SensorDriver *firstInstanc
         return 0;
     int instances = 0;
 
-    // Bh1750 can be at 0x23 (or 0x5C) configure hires continous
+    // Bh1750 can be at 0x23 (or 0x5C)
+    // MT <- 254 (2 commands)
     i2c->beginTransmission(0x23);
-    // Measurement at 1 lux resolution, measurement time 120ms
+    i2c->write((int8_t)0x47);
+    i2c->endTransmission();
+    i2c->beginTransmission(0x23);
+    i2c->write((int8_t)0x7e);
+    i2c->endTransmission();
+
+    // 1 lux resolution continous, measurement time 120ms
+    i2c->beginTransmission(0x23);
     i2c->write((int8_t)0x10);
     uint8_t e = i2c->endTransmission();
     Serial.printf("Bh1750 endTransmission %i\n", e);
@@ -26,9 +34,9 @@ int Bh1750Driver::CreateDriverInstances(TwoWire *i2c, SensorDriver *firstInstanc
 
 int Bh1750Driver::GetPacketData(char *ptr)
 {
-    char t[16];
-    itoa(_lastLux, t, 10);
-    // lux,id=BHc25732 value=191
+    char t[32];
+    dtostrf((double)_lastLux, 1, 2, t);
+    // lux,id=BHc25732 value=191.12
     return sprintf(ptr, "lux,id=%s value=%s\n", _id, t);
 }
 
@@ -43,12 +51,12 @@ void Bh1750Driver::Handle()
     // Read the lux value
     if (_i2c->requestFrom(_address, 2) == 2)
     {
-        _lastLux = (_i2c->read() << 8) | _i2c->read();
-        // Compensate for window as per data sheet
-        _lastLux = _lastLux / 1.2f;
+        int lastLux = (_i2c->read() << 8) | _i2c->read();
+        // Convert to LUX for MT value of 254
+        _lastLux = lastLux * .23f;
     }
     else
-        _lastLux = 0xffff;
+        _lastLux = -1;
 
     // Debug output
     Serial.print(_id);
@@ -70,7 +78,7 @@ void Bh1750Driver::GetValues(void cb(const char *, const char *))
         return;
     }
 
-    cb("Light Intensity (Lux)", itoa(_lastLux, val, 10));
+    cb("Light Intensity (Lux)", dtostrf((double)_lastLux, 1, 2, val));
 }
 
 // *** PRIVATE ***

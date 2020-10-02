@@ -33,14 +33,14 @@
 // const char *hostname = "es-garage-int";
 // #define BME680_TEMP_TRIM 0.8f // Subtract this
 
-// const char *hostname = "es-master-bedroom";
-// #define BME680_TEMP_TRIM 0.0f // Subtract this
+const char *hostname = "es-master-bedroom";
+#define BME680_TEMP_TRIM 1.5f // Subtract this
 
 // const char *hostname = "es-guest-bedroom";
 // #define BME680_TEMP_TRIM 0.0f // Subtract this
 
-const char *hostname = "es-livingroom";
-#define BME680_TEMP_TRIM 1.2f // Subtract this
+// const char *hostname = "es-livingroom";
+// #define BME680_TEMP_TRIM 1.2f // Subtract this
 
 // const char *hostname = "es-study";
 // #define BME680_TEMP_TRIM 0.0f // Subtract this
@@ -54,6 +54,9 @@ const char *hostname = "es-livingroom";
 // Requires Witty Cloud with LDR on board
 // https://www.instructables.com/id/Witty-Cloud-Module-Adapter-Board/
 #define LDR_DRIVER 0
+
+// Flash led for debugging
+#define FLASH_LED 0
 
 // ********************************
 
@@ -308,9 +311,11 @@ void loop()
     lastPollMillis = millis();
   }
 
+#if FLASH_LED
   // Flash led for debug
   digitalWrite(LED_BUILTIN, HIGH);
   delay(200);
   digitalWrite(LED_BUILTIN, LOW);
   delay(200);
+#endif
 }
