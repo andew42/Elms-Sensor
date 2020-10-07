@@ -19,9 +19,9 @@ int Bh1750Driver::CreateDriverInstances(TwoWire *i2c, SensorDriver *firstInstanc
     i2c->write((int8_t)0x7e);
     i2c->endTransmission();
 
-    // 1 lux resolution continous, measurement time 120ms
+    // 0.5 lux resolution continous, measurement time 120ms
     i2c->beginTransmission(0x23);
-    i2c->write((int8_t)0x10);
+    i2c->write((int8_t)0x11);
     uint8_t e = i2c->endTransmission();
     Serial.printf("Bh1750 endTransmission %i\n", e);
     if (e == 0)
@@ -52,8 +52,8 @@ void Bh1750Driver::Handle()
     if (_i2c->requestFrom(_address, 2) == 2)
     {
         int lastLux = (_i2c->read() << 8) | _i2c->read();
-        // Convert to LUX for MT value of 254
-        _lastLux = lastLux * .23f;
+        // Convert to LUX for MT value of 254 & 0.5 lux
+        _lastLux = lastLux * .11f;
     }
     else
         _lastLux = -1;

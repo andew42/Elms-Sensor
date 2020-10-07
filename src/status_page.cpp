@@ -3,6 +3,12 @@
 #include "main.h"
 #include "status_page.h"
 
+const char *head = R"(
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no,viewport-fit=cover">
+</head>)";
+
 const char *style = R"(
 <style>
 body {
@@ -94,8 +100,15 @@ int webPageLen = 0;
 
 const char *BuildStatusPage()
 {
+    // Html head
+    strcpy(webPage, "<html lang=\"en\">");
+    strcat(webPage, head);
+
+    // body
+    strcat(webPage, "<body>");
+
     // Html page header
-    strcpy(webPage, style);
+    strcat(webPage, style);
     webPageLen = strlen(webPage);
     char tmp[24];
 
@@ -154,6 +167,9 @@ const char *BuildStatusPage()
 
     // Buttons
     webPageLen += sprintf(&webPage[webPageLen], buttons);
+
+    // Closing tags
+    webPageLen += sprintf(&webPage[webPageLen], "</body></html>");
 
     // Report length
     Serial.printf("Web Page Length %i bytes\n", webPageLen);

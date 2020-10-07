@@ -27,6 +27,7 @@
 #define SERVER_PORT 8089
 
 // Enable one of these name/trim pairs
+
 // const char *hostname = "es-garage-ext";
 // #define BME680_TEMP_TRIM 0.7f // Subtract this
 
@@ -43,13 +44,19 @@ const char *hostname = "es-master-bedroom";
 // #define BME680_TEMP_TRIM 1.2f // Subtract this
 
 // const char *hostname = "es-study";
-// #define BME680_TEMP_TRIM 0.0f // Subtract this
+// #define BME680_TEMP_TRIM 1.5f // Subtract this
 
 // const char *hostname = "es-kitchen";
-// #define BME680_TEMP_TRIM 0.0f // Subtract this
+// #define BME680_TEMP_TRIM 1.8f // Subtract this
 
 // const char *hostname = "es-bathroom";
 // #define BME680_TEMP_TRIM 0.0f // Subtract this
+
+// const char *hostname = "es-testbed";
+// #define BME680_TEMP_TRIM 0.0f // Subtract this
+
+// const char *hostname = "es-attic";
+// #define BME680_TEMP_TRIM 1.6f // Subtract this
 
 // Requires Witty Cloud with LDR on board
 // https://www.instructables.com/id/Witty-Cloud-Module-Adapter-Board/
@@ -204,9 +211,15 @@ void setup()
       Serial.println("File System not available");
   }
 
-  // Contact time server and record startup time
-  myTZ.setLocation(F("Europe/London"));
-  waitForSync(15000);
+  // Initialize time library
+  int i = 0;
+  for (; i < 5; i++)
+    if (myTZ.setLocation(F("Europe/London")))
+      break;
+  if (i == 5)
+      Serial.println("Failed to setLocation(...)");
+  if (!waitForSync(15000))
+      Serial.println("Failed to set time");
 
   // Update the startup log
   updateStartupLog();
@@ -263,7 +276,7 @@ void setup()
   delay(1000);
 
   // Create drivers for each of our sensors
-  drivers_count += Bme680Driver::CreateDriverInstances(&I2C, &drivers[drivers_count], MAX_SENSOR_DRIVERS - drivers_count, BME680_TEMP_TRIM);
+  drivers_count += Bme680Driver::CreateDriverInstances(&I2C, &drivers[drivers_count], MAX_SENSOR_DRIVERS - drivers_count, BME680_TEMP_TRIM, BME680_TEMP_TRIM);
   drivers_count += Si705Driver::CreateDriverInstances(&I2C, &drivers[drivers_count], MAX_SENSOR_DRIVERS - drivers_count);
   drivers_count += Bh1750Driver::CreateDriverInstances(&I2C, &drivers[drivers_count], MAX_SENSOR_DRIVERS - drivers_count);
   drivers_count += Ds18b20Driver::CreateDriverInstances(&ds, &drivers[drivers_count], MAX_SENSOR_DRIVERS - drivers_count);
